@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Find_In_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,24 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
+    public static boolean find(Node node, int data) {
         // write your code here
-        int size = 0;
-
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+        if (node.data == data) {
+            return true;
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
-
-        return size;
+        for (Node child : node.children) {
+            boolean res = find(child, data);
+            // ye 2nd return isiliye dena pada kyunki agar stack mein deep gaya ye
+            // recursion, to fir ek return to sirf stack se wapas aane mein use ho jayega.
+            // asli mein to humlog ko jo boolean return karna h, wo to stack ke pure khatam
+            // hone ke baad hi milega. isiliye premature hi stack ko khatam karke humlog
+            // return kar de rahe h true.
+            if (res) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,9 +73,11 @@ public class Size_Of_Generic_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
+        int data = Integer.parseInt(br.readLine());
+
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
+        boolean flag = find(root, data);
+        System.out.println(flag);
         // display(root);
     }
 

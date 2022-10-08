@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Lowest_Common_Ancestor {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,46 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
-        // write your code here
-        int size = 0;
-
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+    public static ArrayList<Integer> nodeToRootPath(Node node, int data) {
+        if (node.data == data) {
+            ArrayList<Integer> path = new ArrayList<>();
+            path.add(node.data);
+            return path;
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
+        for (Node child : node.children) {
+            ArrayList<Integer> ptc = nodeToRootPath(child, data);
+            if (ptc.size() > 0) {
+                ptc.add(node.data);
+                return ptc;
+            }
+        }
 
-        return size;
+        return new ArrayList<>();
+    }
+
+    public static int lca(Node node, int d1, int d2) {
+        // write your code here
+        ArrayList<Integer> path1 = nodeToRootPath(node, d1);
+        ArrayList<Integer> path2 = nodeToRootPath(node, d2);
+
+        int p1 = path1.size() - 1;
+        int p2 = path2.size() - 1;
+
+        while (p1 >= 0 && p2 >= 0 && path1.get(p1) == path2.get(p2)) {
+            p1--;
+            p2--;
+            // while loop tab break hoga jab ek aage badh jayega index, aur uski wajah se ek
+            // step aage badh jayega. jabki humlog ko usse just peeche wala chahiye kyunki
+            // wo hi equal tha.
+        }
+
+        // while loop ka kaand ki wajah se ek step peeche jaa rahe h humlog idhar. sirf
+        // p1++ karte tab bhi chalta waise.
+        p1++;
+        p2++;
+
+        return path1.get(p1);
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,9 +95,12 @@ public class Size_Of_Generic_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
+        int d1 = Integer.parseInt(br.readLine());
+        int d2 = Integer.parseInt(br.readLine());
+
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
+        int lca = lca(root, d1, d2);
+        System.out.println(lca);
         // display(root);
     }
 

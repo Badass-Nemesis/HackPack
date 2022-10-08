@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Node_To_Root_Path_In_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,49 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
+    public static ArrayList<Integer> nodeToRootPath(Node node, int data) {
         // write your code here
-        int size = 0;
-
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+        if (node.data == data) {
+            ArrayList<Integer> res = new ArrayList<>();
+            res.add(node.data);
+            return res;
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
+        for (Node child : node.children) {
+            ArrayList<Integer> pathTillChild = nodeToRootPath(child, data);
+            if (pathTillChild.size() > 0) {
+                pathTillChild.add(node.data);
+                return pathTillChild;
+            }
+        }
 
-        return size;
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<Integer> nodeToRootPath2(Node node, int data) {
+        res = new ArrayList<>();
+        nodeToRootPath3(node, data);
+        return res;
+    }
+
+    public static ArrayList<Integer> res;
+
+    public static void nodeToRootPath3(Node node, int data) {
+
+        if (node.data == data) {
+            res.add(node.data);
+            // System.out.println("Hello");
+            return;
+        }
+
+        for (Node child : node.children) {
+            nodeToRootPath3(child, data);
+            if (res.size() > 0) {
+                res.add(node.data);
+                // System.out.println(res);
+                return;
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,9 +98,11 @@ public class Size_Of_Generic_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
+        int data = Integer.parseInt(br.readLine());
+
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
+        ArrayList<Integer> path = nodeToRootPath2(root, data);
+        System.out.println(path);
         // display(root);
     }
 

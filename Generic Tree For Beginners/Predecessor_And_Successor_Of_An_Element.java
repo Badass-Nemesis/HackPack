@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Predecessor_And_Successor_Of_An_Element {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,26 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
-        // write your code here
-        int size = 0;
+    static Node predecessor;
+    static Node successor;
+    static int state;
 
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+    public static void predecessorAndSuccessor(Node node, int data) {
+        // write your code here
+        if (state == 0) {
+            if (node.data == data) {
+                state = 1;
+            } else {
+                predecessor = node;
+            }
+        } else if (state == 1) {
+            successor = node;
+            state = 2;
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
-
-        return size;
+        for (Node child : node.children) {
+            predecessorAndSuccessor(child, data);
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,10 +75,25 @@ public class Size_Of_Generic_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
+        int data = Integer.parseInt(br.readLine());
+
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
-        // display(root);
+        predecessor = null;
+        successor = null;
+        state = 0;
+        predecessorAndSuccessor(root, data);
+        if (predecessor == null) {
+            System.out.println("Predecessor = Not found");
+        } else {
+            System.out.println("Predecessor = " + predecessor.data);
+        }
+
+        if (successor == null) {
+            System.out.println("Successor = Not found");
+        } else {
+            System.out.println("Successor = " + successor.data);
+        }
+
     }
 
 }

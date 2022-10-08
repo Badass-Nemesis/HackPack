@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Level_order_Of_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -45,17 +45,67 @@ public class Size_Of_Generic_Tree {
     }
 
     public static int size(Node node) {
-        // write your code here
-        int size = 0;
+        int s = 0;
 
         for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+            s += size(child);
+        }
+        s += 1;
+
+        return s;
+    }
+
+    public static int max(Node node) {
+        int m = Integer.MIN_VALUE;
+
+        for (Node child : node.children) {
+            int cm = max(child);
+            m = Math.max(m, cm);
+        }
+        m = Math.max(m, node.data);
+
+        return m;
+    }
+
+    public static int height(Node node) {
+        int h = -1;
+
+        for (Node child : node.children) {
+            int ch = height(child);
+            h = Math.max(h, ch);
+        }
+        h += 1;
+
+        return h;
+    }
+
+    public static void traversals(Node node) {
+        System.out.println("Node Pre " + node.data);
+
+        for (Node child : node.children) {
+            System.out.println("Edge Pre " + node.data + "--" + child.data);
+            traversals(child);
+            System.out.println("Edge Post " + node.data + "--" + child.data);
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
+        System.out.println("Node Post " + node.data);
+    }
 
-        return size;
+    public static void levelOrder(Node node) {
+        // write your code here
+        Queue<Node> q = new ArrayDeque<>();
+        q.add(node);
+
+        // use this algo -> remove, print, add
+        while (q.size() != 0) {
+            node = q.remove();
+            System.out.print(node.data + " ");
+            for (Node child : node.children) {
+                q.add(child);
+            }
+        }
+
+        System.out.println(".");
     }
 
     public static void main(String[] args) throws Exception {
@@ -68,9 +118,7 @@ public class Size_Of_Generic_Tree {
         }
 
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
-        // display(root);
+        levelOrder(root);
     }
 
 }

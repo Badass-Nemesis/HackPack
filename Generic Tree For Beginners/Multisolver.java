@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Multisolver {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,20 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
-        // write your code here
-        int size = 0;
+    static int size;
+    static int min;
+    static int max;
+    static int height;
 
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+    public static void multisolver(Node node, int depth) {
+        size++;
+        min = Math.min(min, node.data);
+        max = Math.max(max, node.data);
+        height=Math.max(height, depth);
+
+        for(Node child: node.children){
+            multisolver(child, depth + 1);
         }
-
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
-
-        return size;
     }
 
     public static void main(String[] args) throws Exception {
@@ -68,9 +70,13 @@ public class Size_Of_Generic_Tree {
         }
 
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
-        // display(root);
+
+        size = 0;
+        min = Integer.MAX_VALUE;
+        max = Integer.MIN_VALUE;
+        height = 0;
+        multisolver(root, 0);
+        // System.out.println(sz);
     }
 
 }

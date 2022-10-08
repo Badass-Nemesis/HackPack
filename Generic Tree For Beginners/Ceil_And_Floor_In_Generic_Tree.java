@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Ceil_And_Floor_In_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,18 +44,24 @@ public class Size_Of_Generic_Tree {
         return root;
     }
 
-    public static int size(Node node) {
-        // write your code here
-        int size = 0;
+    static int ceil;
+    static int floor;
 
-        for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+    public static void ceilAndFloor(Node node, int data) {
+        // Write your code here
+        if (node.data > data) {
+            if (node.data < ceil) {
+                ceil = node.data;
+            }
+        } else if (node.data < data) {
+            if (node.data > floor) {
+                floor = node.data;
+            }
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
-
-        return size;
+        for (Node child : node.children) {
+            ceilAndFloor(child, data);
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,10 +73,16 @@ public class Size_Of_Generic_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
+        int data = Integer.parseInt(br.readLine());
+
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
-        // display(root);
+        ceil = Integer.MAX_VALUE; // smallest among largers. iska basic matlab wahi hua, just bada number, wo data
+                                  // se
+        floor = Integer.MIN_VALUE; // largest among smallers. iska basic matlab wahi hua, just chota number, wo
+                                   // data se
+        ceilAndFloor(root, data);
+        System.out.println("CEIL = " + ceil);
+        System.out.println("FLOOR = " + floor);
     }
 
 }

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Maximum_In_A_Generic_Tree {
+public class Level_order_Linewise_Of_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -45,32 +45,72 @@ public class Maximum_In_A_Generic_Tree {
     }
 
     public static int size(Node node) {
-        // write your code here
-        int size = 0;
+        int s = 0;
 
         for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+            s += size(child);
         }
+        s += 1;
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
-
-        return size;
+        return s;
     }
 
     public static int max(Node node) {
-        // basically insitialize kar rahe h sabse minimum value pe, taaki comparing sahi
-        // se ho
-        int max = Integer.MAX_VALUE; // max ki identity -(minus)infinity hoti h. jaise plus ki identity zero, aur
-                                     // multiplication ki identity 1 hoti h.
+        int m = Integer.MIN_VALUE;
 
         for (Node child : node.children) {
-            int childMax = max(child);
-            max = Math.max(childMax, max);
+            int cm = max(child);
+            m = Math.max(m, cm);
+        }
+        m = Math.max(m, node.data);
+
+        return m;
+    }
+
+    public static int height(Node node) {
+        int h = -1;
+
+        for (Node child : node.children) {
+            int ch = height(child);
+            h = Math.max(h, ch);
+        }
+        h += 1;
+
+        return h;
+    }
+
+    public static void traversals(Node node) {
+        System.out.println("Node Pre " + node.data);
+
+        for (Node child : node.children) {
+            System.out.println("Edge Pre " + node.data + "--" + child.data);
+            traversals(child);
+            System.out.println("Edge Post " + node.data + "--" + child.data);
         }
 
-        max = Math.max(node.data, max);
-        return max;
+        System.out.println("Node Post " + node.data);
+    }
+
+    public static void levelOrderLinewise(Node node) {
+        // write your code here
+        Queue<Node> q = new ArrayDeque<>();
+        Queue<Node> childQ = new ArrayDeque<>();
+
+        q.add(node);
+
+        while (q.size() > 0) {
+            node = q.remove();
+            System.out.print(node.data + " ");
+            for (Node child : node.children) {
+                childQ.add(child);
+            }
+            if (q.size() == 0) {
+                q = childQ;
+                childQ = new ArrayDeque<>();
+                System.out.println();
+            }
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -83,9 +123,7 @@ public class Maximum_In_A_Generic_Tree {
         }
 
         Node root = construct(arr);
-        int m = max(root);
-        System.out.println(m);
-        // display(root);
+        levelOrderLinewise(root);
     }
 
 }

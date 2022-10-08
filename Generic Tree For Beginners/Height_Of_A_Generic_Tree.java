@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Size_Of_Generic_Tree {
+public class Height_Of_A_Generic_Tree {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -45,17 +45,41 @@ public class Size_Of_Generic_Tree {
     }
 
     public static int size(Node node) {
-        // write your code here
-        int size = 0;
+        int s = 0;
 
         for (Node child : node.children) {
-            int childSize = size(child);
-            size += childSize;
+            s += size(child);
+        }
+        s += 1;
+
+        return s;
+    }
+
+    public static int max(Node node) {
+        int m = Integer.MIN_VALUE;
+
+        for (Node child : node.children) {
+            int cm = max(child);
+            m = Math.max(m, cm);
+        }
+        m = Math.max(m, node.data);
+
+        return m;
+    }
+
+    public static int height(Node node) {
+        // write your code here
+        int height = -1; // set it as 0 if you want to calculate height on the basis of nodes, and not
+                         // edges
+
+        for (Node child : node.children) {
+            int childHeight = height(child);
+            height = Math.max(childHeight, height);
         }
 
-        size += 1; // ye 1 isiliye add kiye h taaki root bhi add ho jaye
+        height += 1;
 
-        return size;
+        return height;
     }
 
     public static void main(String[] args) throws Exception {
@@ -68,8 +92,8 @@ public class Size_Of_Generic_Tree {
         }
 
         Node root = construct(arr);
-        int sz = size(root);
-        System.out.println(sz);
+        int h = height(root);
+        System.out.println(h);
         // display(root);
     }
 
