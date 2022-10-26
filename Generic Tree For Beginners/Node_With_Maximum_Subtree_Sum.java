@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Kth_Largest_Element_In_Tree {
+public class Node_With_Maximum_Subtree_Sum {
     private static class Node {
         int data;
         ArrayList<Node> children = new ArrayList<>();
@@ -44,37 +44,26 @@ public class Kth_Largest_Element_In_Tree {
         return root;
     }
 
-    static int ceil;
-    static int floor;
+    static int msn = 0; // max sum node
+    static int ms = Integer.MIN_VALUE; // max sum
 
-    public static void ceilAndFloor(Node node, int data) {
-        // Write your code here
-        if (node.data > data) {
-            if (node.data < ceil) {
-                ceil = node.data;
-            }
-        } else if (node.data < data) {
-            if (node.data > floor) {
-                floor = node.data;
-            }
-        }
+    // return sum and calculate max sum sub-tree
+    public static int retSumAndCalculateMSST(Node node) {
+        int sum = 0;
 
         for (Node child : node.children) {
-            ceilAndFloor(child, data);
-        }
-    }
-
-    public static int kthLargest(Node node, int k) {
-        floor = Integer.MIN_VALUE;
-        int num = Integer.MAX_VALUE; // iska floor nikalwate rehna h
-        for (int i = 0; i < k; i++) {
-            ceilAndFloor(node, num); // ye floor set kar dega static mein
-            num = floor; // jiska floor nikalwana h (i mean jitni baar nikalwana h) uske liye ye num ko
-                         // set kar denge, taaki agli baar num ka floor nikal kar aaye
-            floor = Integer.MIN_VALUE; // wapas minus infinity initialize kar denge
+            int childSum = retSumAndCalculateMSST(child);
+            sum += childSum;
         }
 
-        return num;
+        sum += node.data;
+
+        if (sum > ms) {
+            ms = sum;
+            msn = node.data;
+        }
+
+        return sum;
     }
 
     public static void main(String[] args) throws Exception {
@@ -86,11 +75,9 @@ public class Kth_Largest_Element_In_Tree {
             arr[i] = Integer.parseInt(values[i]);
         }
 
-        int k = Integer.parseInt(br.readLine());
-
         Node root = construct(arr);
-        int kthLargest = kthLargest(root, k);
-        System.out.println(kthLargest);
+        retSumAndCalculateMSST(root);
+        System.out.println(msn + "@" + ms);
     }
 
 }
