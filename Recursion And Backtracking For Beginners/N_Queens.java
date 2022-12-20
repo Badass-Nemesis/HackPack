@@ -1,4 +1,3 @@
-// import java.io.*;
 import java.util.*;
 
 public class N_Queens {
@@ -8,21 +7,22 @@ public class N_Queens {
         int n = scn.nextInt();
         int[][] arr = new int[n][n];
         printNQueens(arr, "", 0);
+        scn.close();
     }
 
-    public static boolean isQueenSafe(int[][] chess,int row, int col ){
-        for(int i = row-1, j = col; i>=0; i--){
-            if(chess[i][j]==1){
+    public static boolean isQueenSafe(int[][] chess, int row, int col) {
+        for (int i = row - 1, j = col; i >= 0; i--) {
+            if (chess[i][j] == 1) {
                 return false;
             }
         }
-        for(int i = row-1, j = col-1; i>=0 && j>=0; i--, j--){
-            if(chess[i][j]==1){
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+            if (chess[i][j] == 1) {
                 return false;
             }
         }
-        for(int i = row-1, j = col+1; i>=0 && j<chess[0].length; i--, j++){
-            if(chess[i][j]==1){
+        for (int i = row - 1, j = col + 1; i >= 0 && j < chess[0].length; i--, j++) {
+            if (chess[i][j] == 1) {
                 return false;
             }
         }
@@ -32,7 +32,7 @@ public class N_Queens {
 
     public static void printNQueens(int[][] chess, String qsf, int row) {
         if (row == chess.length) {
-            System.out.println(qsf+".");
+            System.out.println(qsf + ".");
             return;
         }
 
